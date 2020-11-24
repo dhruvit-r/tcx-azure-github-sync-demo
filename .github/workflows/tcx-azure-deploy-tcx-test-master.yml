@@ -1,0 +1,17 @@
+name: Branch Synchronization - TCX
+
+on:
+  push:
+    branches: [ master ]
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Push to Azure DevOps
+        run: |
+          git remote add secondary https://${{ secrets.TCX_AZURE_PAT }}@dev.azure.com/TheGreyLake/TCXTest/_git/TCXTest
+          git push secondary HEAD:refs/heads/master --force --q
